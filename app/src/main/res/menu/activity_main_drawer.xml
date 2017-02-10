@@ -4,29 +4,27 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Home" />
+            android:icon="@drawable/ic_photo_camera_black_24dp"
+            android:title="Camera Control" />
         <item
             android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_photo_library_black_24dp"
             android:title="Gallery" />
+
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Setting" />
+
     </group>
 
-    <item android:title="Account">
+    <item android:title="other">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_logIn"
                 android:icon="@drawable/ic_lock_outline_black_24dp"
                 android:title="Log in"
-                android:visible="true"/>
+                android:visible="true" />
         </menu>
     </item>
 
