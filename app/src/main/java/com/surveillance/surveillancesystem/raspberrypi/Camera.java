@@ -2,6 +2,7 @@ package com.surveillance.surveillancesystem.raspberrypi;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,11 +10,8 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
-import java.net.URLConnection;
+
 
 /**
  * Created by Xuan on 13/2/2017.
@@ -99,15 +97,64 @@ public class Camera {
     }
 
     public boolean startCamera() {
-        boolean success = false;
         try {
             if (getStatus().equals(CAMERA_STATUS_HALTED)) {
-                URL url = new URL(host + "/picam/cmd_pipe.php?cmd=rm 1");
+                URL url = new URL(host + "/picam/cmd_pipe.php?cmd=ru 1");
                 url.openStream();
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return getStatus().equals(CAMERA_STATUS_READY);
+    }
+
+    public boolean stopCamera() {
+        try {
+            if (getStatus().equals(CAMERA_STATUS_READY)) {
+                URL url = new URL(host + "/picam/cmd_pipe.php?cmd=ru 0");
+                url.openStream();
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return getStatus().equals(CAMERA_STATUS_HALTED);
+    }
+
+    public boolean isPowerOn() {
+        return !getStatus().equals(CAMERA_STATUS_HALTED);
+    }
+
+    public boolean startRecordVideo() {
+        boolean success = false;
+        try {
+            if (getStatus().equals(CAMERA_STATUS_READY)) {
+                URL url = new URL(host + "/picam/cmd_pipe.php?cmd=ca 1");
+                url.openStream();
+                success = true;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return success;
     }
+
+    public boolean stopRecordVideo() {
+        boolean success = false;
+        try {
+            if (getStatus().equals(CAMERA_STATUS_RECORDING)) {
+                URL url = new URL(host + "/picam/cmd_pipe.php?cmd=ca 0");
+                url.openStream();
+                success = true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return success;
+    }
+
 }
+
+

@@ -1,11 +1,10 @@
 package com.surveillance.surveillancesystem.Activity;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -14,14 +13,8 @@ import android.widget.Toast;
 import com.surveillance.surveillancesystem.R;
 import com.surveillance.surveillancesystem.raspberrypi.Camera;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import 	android.os.Handler;
+import android.widget.ToggleButton;
 
 public class CameraControlActivity extends MainActivity {
     private static final String TAG = CameraControlActivity.class.getSimpleName();
@@ -31,6 +24,7 @@ public class CameraControlActivity extends MainActivity {
     private TextView statusTxt;
     private Switch cameraSwitch;
     private Camera camera;
+    private ToggleButton recordBtn;
 
 
     @Override
@@ -40,20 +34,43 @@ public class CameraControlActivity extends MainActivity {
         cameraPreview = (ImageView) findViewById(R.id.camera_preview);
         statusTxt = (TextView) findViewById(R.id.status_txt);
         cameraSwitch = (Switch) findViewById(R.id.camera_switch);
+        recordBtn = (ToggleButton) findViewById(R.id.record_button);
+
+        cameraSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!isChecked) {
+                    new SendTurnOffRequestTask().execute();
+                } else{
+                    new SendTurnOnRequestTask().execute();
+                }
+            }
+        });
+
+        recordBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    new SendStartRecordVideoRequestTask().execute();
+                } else{
+                    new SendStopRecordVideoRequestTask().execute();
+                }
+            }
+        });
         camera = new Camera();
         loadTask = new PreviewImageTask();
         loadTask.execute();
         new GetCameraStatusTask().execute();
     }
 
+    @Override
+    public void onPause() {
+        onStop();
+    }
+
     public void capturePhoto(View view) {
         new SendCaptureRequestTask().execute();
     }
-
-    public void recordVideo(View view) {
-
-    }
-
 
     class PreviewImageTask extends AsyncTask<Void, Void, Bitmap> {
 
@@ -88,11 +105,20 @@ public class CameraControlActivity extends MainActivity {
         }
     }
 
-    class SendRecordVideoRequestTask extends AsyncTask<Void, Void, Boolean> {
+    class SendStartRecordVideoRequestTask extends AsyncTask<Void, Void, Boolean> {
         @Override
         protected Boolean doInBackground(Void... params) {
-            return null;
+            return camera.startRecordVideo();
         }
+
+    }
+
+    class SendStopRecordVideoRequestTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            return camera.stopRecordVideo();
+        }
+
     }
 
     class GetCameraStatusTask extends AsyncTask<Void, Void, String> {
@@ -104,7 +130,47 @@ public class CameraControlActivity extends MainActivity {
         @Override
         protected void onPostExecute(String status) {
             statusTxt.setText("Status: " + status);
-            new GetCameraStatusTask().execute();
+            cameraSwitch.setChecked(!status.equals(Camera.CAMERA_STATUS_HALTED));
+            recordBtn.setChecked(status.equals(Camera.CAMERA_STATUS_RECORDING));
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                   new GetCameraStatusTask().execute();
+                }
+            }, 3000);
         }
+    }
+
+    class SendTurnOffRequestTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            return camera.stopCamera();
+        }
+
+//        @Override
+//        protected void onPostExecute(Boolean success) {
+//            if (!success) {
+//                //cameraSwitch.setChecked(true);
+//                Toast.makeText(getApplicationContext(),
+//                        "Cannot turn off, please try again!", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+    }
+
+    class SendTurnOnRequestTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            return camera.startCamera();
+        }
+
+//        @Override
+//        protected void onPostExecute(Boolean success) {
+//            if (!success) {
+//                //cameraSwitch.setChecked(false);
+//                Toast.makeText(getApplicationContext(),
+//                        "Cannot turn On, please try again!", Toast.LENGTH_SHORT).show();
+//            }
+//        }
     }
 }
