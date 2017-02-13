@@ -1,4 +1,4 @@
-package com.surveillance.surveillancesystem;
+package com.surveillance.surveillancesystem.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.google.vr.sdk.widgets.video.VrVideoView.Options;
 import com.google.vr.sdk.widgets.video.VrVideoView;
 import com.google.vr.sdk.widgets.video.VrVideoEventListener;
+import com.surveillance.surveillancesystem.R;
 
 import java.io.IOException;
 
