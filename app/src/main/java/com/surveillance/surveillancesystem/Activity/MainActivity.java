@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +17,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+
+import com.surveillance.surveillancesystem.Fragment.CameraControlFragment;
 import com.surveillance.surveillancesystem.R;
 
 public class MainActivity extends AppCompatActivity
@@ -81,14 +86,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        FragmentManager fragmentManager = getSupportFragmentManager();
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
             Intent intent = new Intent( this, CameraControlActivity.class);
             startActivity(intent);
-
         } else if (id == R.id.nav_gallery) {
+            FragmentTransaction ft = fragmentManager.beginTransaction().replace(R.id.container, new CameraControlFragment());
 
+            Log.e("a", (ft != null)+"" );
+            ft.commit();
         }
 
 

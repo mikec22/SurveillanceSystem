@@ -3,6 +3,7 @@ package com.surveillance.surveillancesystem.Activity;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -16,7 +17,7 @@ import com.surveillance.surveillancesystem.raspberrypi.Camera;
 import 	android.os.Handler;
 import android.widget.ToggleButton;
 
-public class CameraControlActivity extends MainActivity {
+public class CameraControlActivity extends AppCompatActivity {
     private static final String TAG = CameraControlActivity.class.getSimpleName();
 
     private ImageView cameraPreview;
