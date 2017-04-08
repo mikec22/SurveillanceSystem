@@ -64,11 +64,6 @@ public class CameraControlActivity extends AppCompatActivity {
         new GetCameraStatusTask().execute();
     }
 
-    @Override
-    public void onPause() {
-        onStop();
-    }
-
     public void capturePhoto(View view) {
         new SendCaptureRequestTask().execute();
     }

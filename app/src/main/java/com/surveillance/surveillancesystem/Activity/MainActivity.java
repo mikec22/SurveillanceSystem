@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
+import com.surveillance.surveillancesystem.Fragment.BlankFragment;
 import com.surveillance.surveillancesystem.Fragment.CameraControlFragment;
 import com.surveillance.surveillancesystem.R;
 
@@ -87,16 +88,16 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
             Intent intent = new Intent( this, CameraControlActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_gallery) {
-            FragmentTransaction ft = fragmentManager.beginTransaction().replace(R.id.container, new CameraControlFragment());
 
-            Log.e("a", (ft != null)+"" );
-            ft.commit();
+            transaction.replace(R.id.container, new CameraControlFragment()).commit();
+
         }
 
 
