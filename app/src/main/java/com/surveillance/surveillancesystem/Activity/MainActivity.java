@@ -1,12 +1,10 @@
 package com.surveillance.surveillancesystem.Activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,8 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-import com.surveillance.surveillancesystem.Fragment.BlankFragment;
 import com.surveillance.surveillancesystem.Fragment.CameraControlFragment;
+import com.surveillance.surveillancesystem.Fragment.BarChartFragment;
+import com.surveillance.surveillancesystem.Fragment.LineChartFragment;
 import com.surveillance.surveillancesystem.R;
 
 public class MainActivity extends AppCompatActivity
@@ -89,18 +88,22 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            Intent intent = new Intent( this, CameraControlActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
-
-            transaction.replace(R.id.container, new CameraControlFragment()).commit();
-
+        switch (item.getItemId()) {
+            case R.id.nav_camera:
+                transaction.replace(R.id.container, new CameraControlFragment());
+                break;
+            case R.id.nav_gallery:
+                transaction.replace(R.id.container, new LineChartFragment());
+                break;
+            case R.id.nav_barChart:
+                transaction.replace(R.id.container, new BarChartFragment());
+                break;
+            case R.id.nav_lineChart:
+                transaction.replace(R.id.container, new LineChartFragment());
+                break;
         }
-
-
+        transaction.commit();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

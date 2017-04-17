@@ -10,11 +10,21 @@
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_photo_library_black_24dp"
             android:title="Gallery" />
+        <item
+            android:id="@+id/nav_barChart"
+            android:title="Bar Chart"
+            android:icon="@drawable/ic_insert_chart_black_48dp"/>
+        <item
+            android:id="@+id/nav_lineChart"
+            android:title="Line Chart"
+            android:icon="@drawable/ic_show_chart_black_48dp"
+            />
 
         <item
             android:id="@+id/nav_setting"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="Setting" />
+
 
     </group>
 
