@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import com.surveillance.surveillancesystem.Fragment.CameraControlFragment;
 import com.surveillance.surveillancesystem.Fragment.BarChartFragment;
 import com.surveillance.surveillancesystem.Fragment.LineChartFragment;
+import com.surveillance.surveillancesystem.Fragment.LineChartReportFragment;
 import com.surveillance.surveillancesystem.R;
 
 public class MainActivity extends AppCompatActivity
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
         return true;
     }
 
@@ -102,7 +104,12 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_lineChart:
                 transaction.replace(R.id.container, new LineChartFragment());
                 break;
+            case R.id.nav_lineChartReport:
+                transaction.replace(R.id.container, new LineChartReportFragment());
+                break;
+
         }
+
         transaction.commit();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

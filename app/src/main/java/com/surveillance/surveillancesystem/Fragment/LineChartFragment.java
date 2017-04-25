@@ -72,9 +72,7 @@ public class LineChartFragment extends Fragment {
             set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
             set1.setFormSize(15.f);
 
-
             set1.setFillColor(Color.BLACK);
-
 
             ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
             dataSets.add(set1); // add the datasets

@@ -19,7 +19,11 @@
             android:title="Line Chart"
             android:icon="@drawable/ic_show_chart_black_48dp"
             />
-
+        <item
+            android:id="@+id/nav_lineChartReport"
+            android:title="Line Chart Report"
+            android:icon="@drawable/ic_show_chart_black_48dp"
+            />
         <item
             android:id="@+id/nav_setting"
             android:icon="@drawable/ic_settings_black_24dp"
