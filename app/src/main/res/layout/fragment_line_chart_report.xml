@@ -10,22 +10,20 @@
         android:orientation="vertical">
 
         <com.google.vr.sdk.widgets.video.VrVideoView
+            android:id="@+id/videoView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0"
-            android:visibility="gone"
-            android:id="@+id/videoView"/>
+            android:layout_height="300dp" />
 
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView
             android:id="@+id/exoPlayer"
+            android:layout_width="match_parent"
             android:layout_height="240dp"
-            android:layout_width="match_parent"/>
+            android:visibility="gone" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
-            android:layout_height="300dp"/>
-
+            android:layout_height="300dp" />
 
 
     </LinearLayout>
