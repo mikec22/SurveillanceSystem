@@ -3,22 +3,14 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_photo_camera_black_24dp"
-            android:title="Camera Control" />
+            android:id="@+id/nav_dashboard"
+            android:icon="@drawable/ic_dashboard_white_48dp"
+            android:title="Dashboard" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_photo_library_black_24dp"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_barChart"
-            android:title="Bar Chart"
-            android:icon="@drawable/ic_insert_chart_black_48dp"/>
-        <item
-            android:id="@+id/nav_lineChart"
-            android:title="Line Chart"
+            android:id="@+id/nav_analysis_result"
             android:icon="@drawable/ic_show_chart_black_48dp"
-            />
+            android:title="Analysis Result" />
+
         <item
             android:id="@+id/nav_lineChartReport"
             android:title="Line Chart Report"

@@ -12,10 +12,10 @@ import com.surveillance.surveillancesystem.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LineChartReportFragment extends Fragment {
+public class MainFragment extends Fragment {
 
 
-    public LineChartReportFragment() {
+    public MainFragment() {
         // Required empty public constructor
     }
 
@@ -24,8 +24,7 @@ public class LineChartReportFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_line_chart_report, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
 }

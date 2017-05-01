@@ -1,10 +1,15 @@
 package com.surveillance.surveillancesystem.Activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,50 +19,120 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
-import com.surveillance.surveillancesystem.Fragment.CameraControlFragment;
-import com.surveillance.surveillancesystem.Fragment.BarChartFragment;
-import com.surveillance.surveillancesystem.Fragment.LineChartFragment;
-import com.surveillance.surveillancesystem.Fragment.LineChartReportFragment;
+import com.surveillance.surveillancesystem.Fragment.MainFragment;
+import com.surveillance.surveillancesystem.Fragment.ReportListFragment;
+import com.surveillance.surveillancesystem.Fragment.VrViewLineChartReportFragment;
 import com.surveillance.surveillancesystem.R;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
+
+    private Intent intent;
+    private Toolbar toolbar;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
+    private ActionBarDrawerToggle toggle;
+    private TextView usernameView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        intent = getIntent();
+        String username = intent.getStringExtra("USER");
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        setMainFragment();
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        usernameView =(TextView) navigationView.getHeaderView(0).findViewById(R.id.username);
+        usernameView.setText(username);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+                switch (item.getItemId()) {
+                    case R.id.nav_dashboard:
+                        transaction.replace(R.id.container, new MainFragment());
+                        break;
+                    case R.id.nav_analysis_result:
+                        transaction.replace(R.id.container, new ReportListFragment());
+                        break;
+                    case R.id.nav_lineChartReport:
+                        transaction.replace(R.id.container, new VrViewLineChartReportFragment());
+                        break;
+
+                }
+                transaction.addToBackStack(null).commit();
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
     }
 
-    @Override
+    public void setMainFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.container, new MainFragment()).addToBackStack(null);
+        transaction.commit();
+    }
+
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        Log.d("Stack : ", "" + getSupportFragmentManager().getBackStackEntryCount());
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            int fragments = getSupportFragmentManager().getBackStackEntryCount();
+            if (fragments == 1) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                dialog.setTitle("Exit?"); // set title
+                dialog.setMessage("Are you sure to exit?"); // set message
+                dialog.setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                MainActivity.this.finish(); // when click OK button, finish current activity!
+                            }
+                        });
+                dialog.setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show(); // just show a Toast, do nothing else
+                            }
+                        });
+                dialog.create().show();
+//                finish();
+            } else {
+                if (getFragmentManager().getBackStackEntryCount() > 1) {
+                    while (getFragmentManager().getBackStackEntryCount() > 1) {
+                        getFragmentManager().popBackStack();
+                    }
+                } else {
+                    super.onBackPressed();
+                }
+            }
+
         }
     }
 
@@ -65,7 +140,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-
         return true;
     }
 
@@ -84,36 +158,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-        switch (item.getItemId()) {
-            case R.id.nav_camera:
-                transaction.replace(R.id.container, new CameraControlFragment());
-                break;
-            case R.id.nav_gallery:
-                transaction.replace(R.id.container, new LineChartFragment());
-                break;
-            case R.id.nav_barChart:
-                transaction.replace(R.id.container, new BarChartFragment());
-                break;
-            case R.id.nav_lineChart:
-                transaction.replace(R.id.container, new LineChartFragment());
-                break;
-            case R.id.nav_lineChartReport:
-                transaction.replace(R.id.container, new LineChartReportFragment());
-                break;
-
-        }
-
-        transaction.commit();
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 
 }
