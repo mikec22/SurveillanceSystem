@@ -30,6 +30,8 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -40,6 +42,8 @@ public class VrViewLineChartReportFragment extends Fragment {
 
     private VrVideoView videoView;
     private LineChart lineChart;
+    private LoadVideo loadVideoTask;
+    private GetResultData getResultDataTask;
 //    private SimpleExoPlayer player;
 //    private RequestQueue mQueue;
 //    private SimpleExoPlayerView simpleExoPlayerView;
@@ -75,8 +79,10 @@ public class VrViewLineChartReportFragment extends Fragment {
 //            float val = (float) (Math.random() * 50) + 3;
 //            values.add(new Entry(i, val));
 //        }
-        new GetResultData().execute();
-        new LoadVideo().execute();
+        getResultDataTask = new GetResultData();
+        loadVideoTask = new LoadVideo();
+        loadVideoTask.execute();
+        getResultDataTask.execute();
         return view;
     }
 
@@ -143,6 +149,11 @@ public class VrViewLineChartReportFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Log.e("Vr onResume", "is Running");
+        getResultDataTask = new GetResultData();
+        loadVideoTask = new LoadVideo();
+        loadVideoTask.execute();
+        getResultDataTask.execute();
 //        videoView.playVideo();
     }
 
@@ -150,6 +161,7 @@ public class VrViewLineChartReportFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            Log.e("Vr doInBackground", "is Running");
             try {
                 Uri uri = Uri.parse("http://104.199.242.151/360m/media/demo7.mp4");
                 VrVideoView.Options options = new VrVideoView.Options();
@@ -170,13 +182,23 @@ public class VrViewLineChartReportFragment extends Fragment {
             try {
                 URL url = new URL("http://104.199.242.151/360m/get_result.php?" +
                         "type=video&filename=demo7.mp4");
-                BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-                StringBuilder buffer = new StringBuilder();
+                //String parameters = "type=video&filename=demo7.mp4";
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoOutput(true);
+                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                //connection.setRequestMethod("GET");
+                OutputStreamWriter request = new OutputStreamWriter(connection.getOutputStream());
+                //request.write(parameters);
+                request.flush();
+                request.close();
                 String line;
+                InputStreamReader isr = new InputStreamReader(connection.getInputStream());
+                BufferedReader reader = new BufferedReader(isr);
+                StringBuilder stringBuilder = new StringBuilder();
                 while ((line = reader.readLine()) != null) {
-                    buffer.append(line);
+                    stringBuilder.append(line + "\n");
                 }
-                JSONObject jsonObject = new JSONObject(buffer.toString());
+                JSONObject jsonObject = new JSONObject(stringBuilder.toString());
                 Log.e("AsyncTask JSON", jsonObject.toString());
                 return jsonObject;
             } catch (IOException | JSONException e) {
@@ -200,8 +222,9 @@ public class VrViewLineChartReportFragment extends Fragment {
                 // set the line to be drawn like this "- - - - - -"
                 set1.enableDashedLine(10f, 5f, 0f);
                 set1.enableDashedHighlightLine(10f, 5f, 0f);
-                set1.setColor(Color.GREEN);
-                set1.setCircleColor(Color.MAGENTA);
+                set1.setColor(Color.rgb(95, 161, 228));
+                set1.setValueTextColor(Color.DKGRAY);
+                set1.setCircleColor(Color.rgb(95, 161, 228));
                 set1.setLineWidth(1f);
                 set1.setCircleRadius(3f);
                 set1.setDrawCircleHole(false);
@@ -210,7 +233,7 @@ public class VrViewLineChartReportFragment extends Fragment {
                 set1.setFormLineWidth(1f);
                 set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
                 set1.setFormSize(15.f);
-                set1.setFillColor(Color.BLACK);
+                set1.setFillColor(Color.rgb(95, 161, 228));
 
                 ArrayList<ILineDataSet> dataSets = new ArrayList<>();
                 dataSets.add(set1);

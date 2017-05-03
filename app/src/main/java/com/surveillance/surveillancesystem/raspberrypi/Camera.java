@@ -10,6 +10,8 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 
@@ -32,6 +34,7 @@ public class Camera {
      * The Camera IP address or hostname
      **/
     private String host;
+    private boolean isPowerOn;
 
     public Camera() {
         this.host = "http://dev16.asuscomm.com";
@@ -53,7 +56,11 @@ public class Camera {
         String status = CAMERA_STATUS_CONNECTION_ERROR;
         try {
             URL url = new URL(host + "/picam/status.php");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+            InputStreamReader isr = new InputStreamReader(connection.getInputStream());
+            BufferedReader reader = new BufferedReader(isr);
             StringBuilder buffer = new StringBuilder();
             String line = "";
             while ((line = reader.readLine()) != null) {
@@ -66,12 +73,19 @@ public class Camera {
         return status;
     }
 
+//    public boolean isReadyToPreview() {
+//        return getStatus().equals(CAMERA_STATUS_READY) || getStatus().equals(CAMERA_STATUS_RECORDING);
+//    }
+
     public Bitmap getPreviewImage() {
         try {
             if (getStatus().equals(CAMERA_STATUS_READY)
                     || getStatus().equals(CAMERA_STATUS_RECORDING)) {
                 URL url = new URL(host + "/picam/cam_pic.php?pDelay=40000");
-                return BitmapFactory.decodeStream(url.openStream());
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setConnectTimeout(5000);
+                connection.setReadTimeout(5000);
+                return BitmapFactory.decodeStream(connection.getInputStream());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -124,7 +138,11 @@ public class Camera {
     }
 
     public boolean isPowerOn() {
-        return !getStatus().equals(CAMERA_STATUS_HALTED);
+        return isPowerOn;
+    }
+
+    public void setPowerOnState() {
+        isPowerOn = !getStatus().equals(CAMERA_STATUS_HALTED);
     }
 
     public boolean startRecordVideo() {

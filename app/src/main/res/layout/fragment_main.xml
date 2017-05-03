@@ -14,49 +14,113 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Camera 1:"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
+
+        <FrameLayout
+            android:id="@+id/progress_frame1"
+            android:layout_width="match_parent"
+            android:layout_height="225dp">
+
+            <ProgressBar
+                android:id="@+id/load_image_progress1"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
 
         <ImageView
+            android:id="@+id/camera_preview_image1"
             android:layout_width="match_parent"
             android:layout_height="225dp"
             android:background="@drawable/camera_preview_frame"
-            android:src="@drawable/ic_menu_camera" />
+            android:src="@drawable/ic_menu_camera"
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Camera 2:"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
+
+        <FrameLayout
+            android:id="@+id/progress_frame2"
+            android:layout_width="match_parent"
+            android:layout_height="225dp">
+
+            <ProgressBar
+                android:id="@+id/load_image_progress2"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
 
         <ImageView
+            android:id="@+id/camera_preview_image2"
             android:layout_width="match_parent"
             android:layout_height="225dp"
             android:background="@drawable/camera_preview_frame"
-            android:src="@drawable/ic_menu_camera" />
+            android:src="@drawable/ic_menu_camera"
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Camera 3:"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
+
+        <FrameLayout
+            android:id="@+id/progress_frame3"
+            android:layout_width="match_parent"
+            android:layout_height="225dp">
+
+            <ProgressBar
+                android:id="@+id/load_image_progress3"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
 
         <ImageView
+            android:id="@+id/camera_preview_image3"
             android:layout_width="match_parent"
             android:layout_height="225dp"
             android:background="@drawable/camera_preview_frame"
-            android:src="@drawable/ic_menu_camera" />
+            android:src="@drawable/ic_menu_camera"
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Camera 4:"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
+
+        <FrameLayout
+            android:id="@+id/progress_frame4"
+            android:layout_width="match_parent"
+            android:layout_height="225dp">
+
+            <ProgressBar
+                android:id="@+id/load_image_progress4"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
 
         <ImageView
+            android:id="@+id/camera_preview_image4"
             android:layout_width="match_parent"
             android:layout_height="225dp"
             android:background="@drawable/camera_preview_frame"
-            android:src="@drawable/ic_menu_camera" />
+            android:src="@drawable/ic_menu_camera"
+            android:visibility="gone" />
 
     </LinearLayout>
 

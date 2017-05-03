@@ -1,30 +1,44 @@
 package com.surveillance.surveillancesystem.Fragment;
 
 
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
+import com.surveillance.surveillancesystem.Adapter.ReportListArrayAdapter;
 import com.surveillance.surveillancesystem.R;
+import com.surveillance.surveillancesystem.ReportRecord;
+import com.surveillance.surveillancesystem.Tools.DateTools;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ReportListFragment extends ListFragment {
 
-    private ListView reportList;
-    private ArrayAdapter adapter;
+    private ReportListArrayAdapter adapter;
+    private ArrayList<ReportRecord> reportRecords;
 
     public ReportListFragment() {
         // Required empty public constructor
@@ -40,7 +54,8 @@ public class ReportListFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_report_list, container, false);
-
+        Toolbar mActionBarToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        //mActionBarToolbar.setTitle("Report List");
 
         return view;
     }
@@ -49,13 +64,7 @@ public class ReportListFragment extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        List<String> data = new ArrayList<String>();
-        for (int i = 0; i < 30; i++) {
-            data.add("smyh" + i);
-        }
-        adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, data);
-        setListAdapter(adapter);
+        new LoadReportListTask().execute();
     }
 
     @Override
@@ -63,5 +72,63 @@ public class ReportListFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
         String item = adapter.getItem(position).toString();
         Toast.makeText(getActivity(), item, Toast.LENGTH_SHORT).show();
+    }
+
+    private class LoadReportListTask extends AsyncTask<Void, Void, ArrayList<ReportRecord>> {
+        @Override
+        protected ArrayList<ReportRecord> doInBackground(Void... params) {
+            try {
+                URL url = new URL("http://104.199.242.151/360m/get_video_report_list.php");
+                //String parameters = "type=video&filename=demo7.mp4";
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoOutput(true);
+
+                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                //connection.setRequestMethod("GET");
+                OutputStreamWriter request = new OutputStreamWriter(connection.getOutputStream());
+                //request.write(parameters);
+                request.flush();
+                request.close();
+                String line;
+                InputStreamReader isr = new InputStreamReader(connection.getInputStream());
+                BufferedReader reader = new BufferedReader(isr);
+                StringBuilder stringBuilder = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line + "\n");
+                }
+
+                JSONArray jsonArray = new JSONArray(stringBuilder.toString());
+                reportRecords = new ArrayList<>();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    ReportRecord reportRecord = new ReportRecord();
+                    reportRecord.setFileName(jsonArray.getJSONObject(i).getString("fileName"));
+                    reportRecord.setAvgFace(jsonArray.getJSONObject(i).getInt("avgFace"));
+                    reportRecord.setDuration(jsonArray.getJSONObject(i).getInt("duration"));
+                    reportRecord.setFps(jsonArray.getJSONObject(i).getInt("fps"));
+                    reportRecord.setcDate(DateTools.StringToDate(jsonArray.getJSONObject(i).getString("cDate")));
+                    reportRecord.setmDate(DateTools.StringToDate(jsonArray.getJSONObject(i).getString("mDate")));
+                    reportRecord.setRecordDate(DateTools.StringToDate(jsonArray.getJSONObject(i).getString("recordDate")));
+                    Log.e("setRecordDate", reportRecord.getRecordDate().toString());
+                    URL imageURL = new URL("http://104.199.242.151:5000/thumbs/CCTVTEST_th.jpg");
+//                    URL imageURL = new URL("http://104.199.242.151:5000"
+//                            + jsonArray.getJSONObject(i).getString("thumbsPath"));
+                    //Log.e("URL", imageURL.toString());
+                    reportRecord.setThumbImage(BitmapFactory.decodeStream(imageURL.openStream()));
+                    reportRecords.add(reportRecord);
+                }
+                return reportRecords;
+            } catch (IOException | JSONException | ParseException e) {
+                e.printStackTrace();
+                cancel(true);
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<ReportRecord> reportRecords) {
+            adapter = new ReportListArrayAdapter(getActivity(),
+                    android.R.layout.list_content, reportRecords);
+            setListAdapter(adapter);
+        }
     }
 }

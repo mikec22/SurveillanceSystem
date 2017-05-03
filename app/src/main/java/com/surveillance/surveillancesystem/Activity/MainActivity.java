@@ -77,10 +77,12 @@ public class MainActivity extends AppCompatActivity {
                         transaction.replace(R.id.container, new ReportListFragment());
                         break;
                     case R.id.nav_lineChartReport:
+
                         transaction.replace(R.id.container, new VrViewLineChartReportFragment());
                         break;
 
                 }
+              //  navigationView.getMenu().getItem(1).setChecked()
                 transaction.addToBackStack(null).commit();
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
@@ -111,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                getFragmentManager().popBackStack();
                                 MainActivity.this.finish(); // when click OK button, finish current activity!
                             }
                         });
@@ -118,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show(); // just show a Toast, do nothing else
+                                //Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show(); // just show a Toast, do nothing else
                             }
                         });
                 dialog.create().show();
@@ -152,11 +155,12 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+           Intent intent = new Intent(this, CameraSettingsActivity.class);
+            startActivity(intent);
         }
-
         return super.onOptionsItemSelected(item);
     }
+
 
 
 
