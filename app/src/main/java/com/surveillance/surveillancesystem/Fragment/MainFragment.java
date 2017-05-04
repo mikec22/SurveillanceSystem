@@ -75,7 +75,7 @@ public class MainFragment extends Fragment {
 
     @Override
     public void onPause() {
-        previewImageTask = null;
+        previewImageTask.cancel(false);
         super.onPause();
 //        if (mThreadHandler != null) {
 //            mThreadHandler.removeCallbacks(KeepLoadPreviewImageThread1);
@@ -151,7 +151,7 @@ public class MainFragment extends Fragment {
         private final ImageView cameraPreviewImage;
         private final Camera camera;
 
-        public PreviewImageTask(FrameLayout progressFrame, ProgressBar progressBar,
+         PreviewImageTask(FrameLayout progressFrame, ProgressBar progressBar,
                                 ImageView cameraPreviewImage, Camera camera) {
             super();
             this.progressFrame = progressFrame;
@@ -191,9 +191,9 @@ public class MainFragment extends Fragment {
         protected void onCancelled() {
             Log.e("onCancelled()", "isRunning");
             showImageProgress(progressFrame, progressBar, cameraPreviewImage, true);
-            previewImageTask = new PreviewImageTask(progressFrame, progressBar,
-                    cameraPreviewImage, camera);
-            previewImageTask.execute();
+//            previewImageTask = new PreviewImageTask(progressFrame, progressBar,
+//                    cameraPreviewImage, camera);
+//            previewImageTask.execute();
         }
     }
 

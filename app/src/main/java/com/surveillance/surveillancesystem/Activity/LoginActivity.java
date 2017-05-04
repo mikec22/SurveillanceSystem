@@ -3,22 +3,20 @@ package com.surveillance.surveillancesystem.Activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -31,30 +29,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.surveillance.surveillancesystem.R;
+import com.surveillance.surveillancesystem.Tools.HashTools;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.surveillance.surveillancesystem.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -355,7 +345,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             try {
                 URL url = new URL(host);
-                String parameters = "loginName=" + userID + "&passwd=" + hashSHA256(password);
+                String parameters = "loginName=" + userID + "&passwd=" + HashTools.hashSHA256(password);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoOutput(true);
                 connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -374,7 +364,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 JSONObject userDetailsJson = new JSONObject(stringBuilder.toString());
                 Log.e("User Login", userDetailsJson.toString());
                 return userDetailsJson.getString("status").equals("success");
-            } catch (IOException | JSONException e) {
+            } catch (IOException | JSONException | NoSuchAlgorithmException e) {
                 e.printStackTrace();
                 return false;
             }

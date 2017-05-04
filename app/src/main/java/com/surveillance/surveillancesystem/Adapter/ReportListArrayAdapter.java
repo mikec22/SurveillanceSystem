@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,8 @@ public class ReportListArrayAdapter extends ArrayAdapter<ReportRecord> {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.tvVideoName.setText("File Name: " + reportRecord.getFileName());
-        int duration = (int) (reportRecord.getDuration() / reportRecord.getFps());
+        int duration = reportRecord.getDuration();
+        Log.e("duration", duration+"");
         int mins = duration / 60;
         int sec = duration % 60;
         holder.tvDuration.setText("Duration: " + mins + "m" + sec + "s");
@@ -65,4 +67,7 @@ public class ReportListArrayAdapter extends ArrayAdapter<ReportRecord> {
         return convertView;
     }
 
+    public List<ReportRecord> getReportRecords() {
+        return reportRecords;
+    }
 }

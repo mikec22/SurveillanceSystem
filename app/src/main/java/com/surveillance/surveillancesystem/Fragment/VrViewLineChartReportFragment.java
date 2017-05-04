@@ -163,7 +163,7 @@ public class VrViewLineChartReportFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
             Log.e("Vr doInBackground", "is Running");
             try {
-                Uri uri = Uri.parse("http://104.199.242.151/360m/media/demo7.mp4");
+                Uri uri = Uri.parse("http://104.199.242.151:5000/result/CCTVTEST.mp4");
                 VrVideoView.Options options = new VrVideoView.Options();
                 options.inputType = VrVideoView.Options.TYPE_MONO;
                 videoView.loadVideo(uri, options);
@@ -181,7 +181,7 @@ public class VrViewLineChartReportFragment extends Fragment {
         protected JSONObject doInBackground(Void... params) {
             try {
                 URL url = new URL("http://104.199.242.151/360m/get_result.php?" +
-                        "type=video&filename=demo7.mp4");
+                        "type=video&filename=cctvtest.mp4");
                 //String parameters = "type=video&filename=demo7.mp4";
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoOutput(true);

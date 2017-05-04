@@ -1,27 +1,25 @@
 package com.surveillance.surveillancesystem.Fragment;
 
 
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.support.v7.widget.Toolbar;
 
 import com.surveillance.surveillancesystem.Adapter.ReportListArrayAdapter;
 import com.surveillance.surveillancesystem.R;
 import com.surveillance.surveillancesystem.ReportRecord;
-import com.surveillance.surveillancesystem.Tools.DateTools;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,7 +27,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.ParseException;
 import java.util.ArrayList;
 
 /**
@@ -37,7 +34,7 @@ import java.util.ArrayList;
  */
 public class ReportListFragment extends ListFragment {
 
-    private ReportListArrayAdapter adapter;
+    private ReportListArrayAdapter reportListArrayAdapter;
     private ArrayList<ReportRecord> reportRecords;
 
     public ReportListFragment() {
@@ -70,7 +67,7 @@ public class ReportListFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        String item = adapter.getItem(position).toString();
+        String item = reportListArrayAdapter.getItem(position).toString();
         Toast.makeText(getActivity(), item, Toast.LENGTH_SHORT).show();
     }
 
@@ -82,7 +79,6 @@ public class ReportListFragment extends ListFragment {
                 //String parameters = "type=video&filename=demo7.mp4";
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoOutput(true);
-
                 connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 //connection.setRequestMethod("GET");
                 OutputStreamWriter request = new OutputStreamWriter(connection.getOutputStream());
@@ -96,28 +92,31 @@ public class ReportListFragment extends ListFragment {
                 while ((line = reader.readLine()) != null) {
                     stringBuilder.append(line + "\n");
                 }
-
-                JSONArray jsonArray = new JSONArray(stringBuilder.toString());
+                JSONObject jsonObject = new JSONObject(stringBuilder.toString());
+                JSONArray jsonArray = jsonObject.getJSONArray("report_list");
                 reportRecords = new ArrayList<>();
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    ReportRecord reportRecord = new ReportRecord();
-                    reportRecord.setFileName(jsonArray.getJSONObject(i).getString("fileName"));
-                    reportRecord.setAvgFace(jsonArray.getJSONObject(i).getInt("avgFace"));
-                    reportRecord.setDuration(jsonArray.getJSONObject(i).getInt("duration"));
-                    reportRecord.setFps(jsonArray.getJSONObject(i).getInt("fps"));
-                    reportRecord.setcDate(DateTools.StringToDate(jsonArray.getJSONObject(i).getString("cDate")));
-                    reportRecord.setmDate(DateTools.StringToDate(jsonArray.getJSONObject(i).getString("mDate")));
-                    reportRecord.setRecordDate(DateTools.StringToDate(jsonArray.getJSONObject(i).getString("recordDate")));
-                    Log.e("setRecordDate", reportRecord.getRecordDate().toString());
-                    URL imageURL = new URL("http://104.199.242.151:5000/thumbs/CCTVTEST_th.jpg");
+                    ReportRecord reportRecord = new ReportRecord(jsonArray.getJSONObject(i));
+//                    reportRecord.setFileName(jsonArray.getJSONObject(i).getString("fileName"));
+//                    reportRecord.setAvgFace(jsonArray.getJSONObject(i).getInt("avgFace"));
+//                    reportRecord.setDuration(jsonArray.getJSONObject(i).getInt("duration"));
+//                    reportRecord.setFps(jsonArray.getJSONObject(i).getInt("fps"));
+//                    reportRecord.setcDate(DateTools.StringToDate(jsonArray.getJSONObject(i).getString("cDate")));
+//                    reportRecord.setmDate(DateTools.StringToDate(jsonArray.getJSONObject(i).getString("mDate")));
+//                    reportRecord.setRecordDate(DateTools.StringToDate(jsonArray.getJSONObject(i).getString("recordDate")));
+//                    Log.e("setRecordDate", reportRecord.getRecordDate().toString());
+//                    //URL imageURL = new URL("http://104.199.242.151:5000/thumbs/CCTVTEST_th.jpg");
 //                    URL imageURL = new URL("http://104.199.242.151:5000"
 //                            + jsonArray.getJSONObject(i).getString("thumbsPath"));
-                    //Log.e("URL", imageURL.toString());
-                    reportRecord.setThumbImage(BitmapFactory.decodeStream(imageURL.openStream()));
+//                    HttpURLConnection imageConnection = (HttpURLConnection) imageURL.openConnection();
+//                    imageConnection.setConnectTimeout(2000);
+//                    imageConnection.setReadTimeout(2000);
+//                    //Log.e("URL", imageURL.toString());
+//                    reportRecord.setThumbImage(BitmapFactory.decodeStream(imageConnection.getInputStream()));
                     reportRecords.add(reportRecord);
                 }
                 return reportRecords;
-            } catch (IOException | JSONException | ParseException e) {
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
                 cancel(true);
                 return null;
@@ -126,9 +125,9 @@ public class ReportListFragment extends ListFragment {
 
         @Override
         protected void onPostExecute(ArrayList<ReportRecord> reportRecords) {
-            adapter = new ReportListArrayAdapter(getActivity(),
+            reportListArrayAdapter = new ReportListArrayAdapter(getActivity(),
                     android.R.layout.list_content, reportRecords);
-            setListAdapter(adapter);
+            setListAdapter(reportListArrayAdapter);
         }
     }
 }

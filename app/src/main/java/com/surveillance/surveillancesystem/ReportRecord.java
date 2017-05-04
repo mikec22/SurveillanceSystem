@@ -1,21 +1,54 @@
 package com.surveillance.surveillancesystem;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
-import java.sql.Timestamp;
+import com.surveillance.surveillancesystem.Tools.DateTools;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.ParseException;
 import java.util.Date;
 
 
 public class ReportRecord {
 
-    private int id, recordBy, location, totalFace, avgFace, fps, width, height;
+    private int id, recordBy, location, totalFace, avgFace, fps, width, height, duration;
     private String type, fileName, fileSize, rawPath, resultPath, thumbsPath;
-    private long duration;
     private Date recordDate, cDate, mDate;
     private Bitmap thumbImage;
 
     public ReportRecord() {
 
+    }
+
+    public ReportRecord(JSONObject jsonObject) {
+        try {
+            id = jsonObject.getInt("id");
+            recordBy = jsonObject.getInt("recordBy");
+            totalFace = jsonObject.getInt("totalFace");
+            avgFace = jsonObject.getInt("avgFace");
+            duration = jsonObject.getInt("duration");
+            fps = jsonObject.getInt("fps");
+            width = jsonObject.getInt("width");
+            height = jsonObject.getInt("height");
+            type = jsonObject.getString("type");
+            fileName = jsonObject.getString("fileName");
+            fileSize = jsonObject.getString("fileSize");
+            rawPath = jsonObject.getString("rawPath");
+            resultPath = jsonObject.getString("resultPath");
+            thumbsPath = jsonObject.getString("thumbsPath");
+            recordDate = DateTools.StringToDate(jsonObject.getString("recordDate"));
+            cDate = DateTools.StringToDate(jsonObject.getString("cDate"));
+            mDate = DateTools.StringToDate(jsonObject.getString("mDate"));
+            setThumbImageByURL();
+        } catch (JSONException | ParseException e) {
+            e.printStackTrace();
+        }
     }
 
 //    public ReportRecord(int id, String type, int recordBy, String fileName, Date recordDate,
@@ -145,11 +178,11 @@ public class ReportRecord {
         this.resultPath = resultPath;
     }
 
-    public long getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(long duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 
@@ -191,5 +224,31 @@ public class ReportRecord {
 
     public void setThumbImage(Bitmap thumbImage) {
         this.thumbImage = thumbImage;
+    }
+
+    public void setThumbImageByURL() {
+        try {
+            URL imageURL = new URL("http://104.199.242.151:5000" + thumbsPath);
+            HttpURLConnection imageConnection = (HttpURLConnection) imageURL.openConnection();
+            imageConnection.setConnectTimeout(2000);
+            imageConnection.setReadTimeout(2000);
+            //Log.e("URL", imageURL.toString());
+            thumbImage = BitmapFactory.decodeStream(imageConnection.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setThumbImageByURL(String url) {
+        try {
+            URL imageURL = new URL(url);
+            HttpURLConnection imageConnection = (HttpURLConnection) imageURL.openConnection();
+            imageConnection.setConnectTimeout(2000);
+            imageConnection.setReadTimeout(2000);
+            //Log.e("URL", imageURL.toString());
+            thumbImage = BitmapFactory.decodeStream(imageConnection.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
