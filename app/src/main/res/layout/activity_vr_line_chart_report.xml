@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.surveillance.surveillancesystem.Activity.VrLineChartReportActivity">
+    tools:context="com.surveillance.surveillancesystem.Activity.VideoLineChartReportActivity">
 
     <com.google.vr.sdk.widgets.video.VrVideoView
         android:id="@+id/vrVideoView"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="225dp"
+        android:visibility="gone" />
+
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="225dp"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/videoProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="225dp"
+        android:padding="150dp" />
 
     <FrameLayout
         android:id="@+id/container"
@@ -20,7 +32,24 @@
         <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <android.support.v4.view.PagerTabStrip
+                android:id="@+id/pager_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp" />
+
+        </android.support.v4.view.ViewPager>
+
+        <ProgressBar
+            android:id="@+id/dataProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="125dp" />
 
     </FrameLayout>
 

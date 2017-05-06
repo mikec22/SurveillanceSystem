@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class HashTools {
+public final class HashTools {
 
     public static String hashSHA256(String base) throws NoSuchAlgorithmException,
             UnsupportedEncodingException {

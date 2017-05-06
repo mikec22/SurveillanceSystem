@@ -30,6 +30,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.surveillance.surveillancesystem.R;
+import com.surveillance.surveillancesystem.Server;
 import com.surveillance.surveillancesystem.Tools.HashTools;
 
 import org.json.JSONException;
@@ -339,9 +340,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
             //userDetails[0] is userID. userDetails[1] is password.
             //RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-            String host = "http://fyp.bu5hit.xyz/360-cms/login.php";
-            Log.e("User ID", userID);
-            Log.e("Hashed Password", hashSHA256(password));
+            String host = Server.phpPath + "/login.php";
+//            Log.e("User ID", userID);
 
             try {
                 URL url = new URL(host);

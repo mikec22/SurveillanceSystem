@@ -1,6 +1,7 @@
 package com.surveillance.surveillancesystem.Fragment;
 
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,11 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.surveillance.surveillancesystem.Activity.VideoLineChartReportActivity;
 import com.surveillance.surveillancesystem.Adapter.ReportListArrayAdapter;
 import com.surveillance.surveillancesystem.R;
 import com.surveillance.surveillancesystem.ReportRecord;
+import com.surveillance.surveillancesystem.Server;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,25 +59,33 @@ public class ReportListFragment extends ListFragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        new LoadReportListTask().execute();
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        new LoadReportListTask().execute();
+
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        String item = reportListArrayAdapter.getItem(position).toString();
-        Toast.makeText(getActivity(), item, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), VideoLineChartReportActivity.class);
+        intent.putExtra("ReportRecord",reportRecords.get(position));
+        startActivity(intent);
+//        String item = reportListArrayAdapter.getItem(position).toString();
+//        Toast.makeText(getActivity(), item, Toast.LENGTH_SHORT).show();
     }
 
     private class LoadReportListTask extends AsyncTask<Void, Void, ArrayList<ReportRecord>> {
         @Override
         protected ArrayList<ReportRecord> doInBackground(Void... params) {
             try {
-                URL url = new URL("http://104.199.242.151/360m/get_video_report_list.php");
+                URL url = new URL(Server.phpPath + "/get_video_report_list.php");
                 //String parameters = "type=video&filename=demo7.mp4";
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoOutput(true);

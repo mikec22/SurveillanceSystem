@@ -169,12 +169,22 @@ public class MainFragment extends Fragment {
         @Override
         protected Bitmap doInBackground(Void... params) {
             Log.e("doInBackground", "is Running");
-            if (camera.getStatus().equals(Camera.CAMERA_STATUS_CONNECTION_ERROR)) {
-                this.cancel(true);
-                return null;
-            }
+//            if (camera.getStatus().equals(Camera.CAMERA_STATUS_CONNECTION_ERROR)) {
+//                this.cancel(true);
+//                return null;
+//            }
             //Log.e("Camera status", camera.getStatus());
             return camera.getPreviewImage();
+//            URL url = null;
+//            try {
+//                url = new URL("http://fyp.bu5hit.xyz:5000/stream/1");
+//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                return BitmapFactory.decodeStream(connection.getInputStream());
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                return null;
+//            }
+
         }
 
         @Override
@@ -182,9 +192,9 @@ public class MainFragment extends Fragment {
             Log.e("onPostExecute", "is Running");
             showImageProgress(progressFrame, progressBar, cameraPreviewImage, false);
             cameraPreviewImage.setImageBitmap(bitmap);
-            previewImageTask = new PreviewImageTask(progressFrame, progressBar,
-                    cameraPreviewImage, camera);
-            previewImageTask.execute();
+//            previewImageTask = new PreviewImageTask(progressFrame, progressBar,
+//                    cameraPreviewImage, camera);
+//            previewImageTask.execute();
         }
 
         @Override

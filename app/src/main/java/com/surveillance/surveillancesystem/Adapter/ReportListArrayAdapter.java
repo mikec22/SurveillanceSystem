@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,17 +19,15 @@ import java.util.List;
 
 
 public class ReportListArrayAdapter extends ArrayAdapter<ReportRecord> {
-    private Context context;
+
     private List<ReportRecord> reportRecords;
 
     public ReportListArrayAdapter(@NonNull Context context, @LayoutRes int resource) {
         super(context, resource);
-        this.context = context;
     }
 
     public ReportListArrayAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<ReportRecord> reportRecords) {
         super(context, resource, reportRecords);
-        this.context = context;
         this.reportRecords = reportRecords;
     }
 
@@ -39,11 +36,12 @@ public class ReportListArrayAdapter extends ArrayAdapter<ReportRecord> {
         TextView tvVideoName, tvDuration, tvRecordDate;
     }
 
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         ReportRecord reportRecord = reportRecords.get(position);
 
-        LayoutInflater mInflater = (LayoutInflater) context
+        LayoutInflater mInflater = (LayoutInflater) super.getContext()
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.report_list_row, parent, false);
@@ -58,10 +56,9 @@ public class ReportListArrayAdapter extends ArrayAdapter<ReportRecord> {
         }
         holder.tvVideoName.setText("File Name: " + reportRecord.getFileName());
         int duration = reportRecord.getDuration();
-        Log.e("duration", duration+"");
         int mins = duration / 60;
         int sec = duration % 60;
-        holder.tvDuration.setText("Duration: " + mins + "m" + sec + "s");
+        holder.tvDuration.setText("Duration: " + mins + "m " + sec + "s");
         holder.tvRecordDate.setText("Record Date: " + DateTools.DateToString(reportRecord.getRecordDate()));
         holder.thumbView.setImageBitmap(reportRecord.getThumbImage());
         return convertView;
@@ -70,4 +67,5 @@ public class ReportListArrayAdapter extends ArrayAdapter<ReportRecord> {
     public List<ReportRecord> getReportRecords() {
         return reportRecords;
     }
+
 }

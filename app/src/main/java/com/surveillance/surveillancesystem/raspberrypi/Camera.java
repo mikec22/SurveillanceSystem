@@ -2,7 +2,6 @@ package com.surveillance.surveillancesystem.raspberrypi;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Handler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,7 +9,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -79,14 +77,15 @@ public class Camera {
 
     public Bitmap getPreviewImage() {
         try {
-            if (getStatus().equals(CAMERA_STATUS_READY)
-                    || getStatus().equals(CAMERA_STATUS_RECORDING)) {
+//            if (getStatus().equals(CAMERA_STATUS_READY)
+//                    || getStatus().equals(CAMERA_STATUS_RECORDING)) {
                 URL url = new URL(host + "/picam/cam_pic.php?pDelay=40000");
+//                URL url = new URL(host + "/stream/1");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setConnectTimeout(5000);
-                connection.setReadTimeout(5000);
+//                connection.setConnectTimeout(5000);
+//                connection.setReadTimeout(5000);
                 return BitmapFactory.decodeStream(connection.getInputStream());
-            }
+//            }
         } catch (IOException e) {
             e.printStackTrace();
         }

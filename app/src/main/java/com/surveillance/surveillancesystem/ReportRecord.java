@@ -9,18 +9,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.Date;
 
 
-public class ReportRecord {
+public class ReportRecord implements Serializable {
 
     private int id, recordBy, location, totalFace, avgFace, fps, width, height, duration;
-    private String type, fileName, fileSize, rawPath, resultPath, thumbsPath;
-    private Date recordDate, cDate, mDate;
-    private Bitmap thumbImage;
+    private String type, category, fileName, fileSize, rawPath, resultPath, thumbsPath;
+    private transient Date recordDate, cDate, mDate;
+    private transient Bitmap thumbImage;
 
     public ReportRecord() {
 
@@ -29,6 +30,7 @@ public class ReportRecord {
     public ReportRecord(JSONObject jsonObject) {
         try {
             id = jsonObject.getInt("id");
+            category = jsonObject.getString("category");
             recordBy = jsonObject.getInt("recordBy");
             totalFace = jsonObject.getInt("totalFace");
             avgFace = jsonObject.getInt("avgFace");
@@ -226,12 +228,18 @@ public class ReportRecord {
         this.thumbImage = thumbImage;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public void setThumbImageByURL() {
         try {
-            URL imageURL = new URL("http://104.199.242.151:5000" + thumbsPath);
+            URL imageURL = new URL(Server.mediaPath + thumbsPath);
             HttpURLConnection imageConnection = (HttpURLConnection) imageURL.openConnection();
-            imageConnection.setConnectTimeout(2000);
-            imageConnection.setReadTimeout(2000);
             //Log.e("URL", imageURL.toString());
             thumbImage = BitmapFactory.decodeStream(imageConnection.getInputStream());
         } catch (IOException e) {
@@ -243,8 +251,6 @@ public class ReportRecord {
         try {
             URL imageURL = new URL(url);
             HttpURLConnection imageConnection = (HttpURLConnection) imageURL.openConnection();
-            imageConnection.setConnectTimeout(2000);
-            imageConnection.setReadTimeout(2000);
             //Log.e("URL", imageURL.toString());
             thumbImage = BitmapFactory.decodeStream(imageConnection.getInputStream());
         } catch (IOException e) {

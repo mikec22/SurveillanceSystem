@@ -7,12 +7,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.google.vr.sdk.widgets.video.VrVideoView.Options;
-import com.google.vr.sdk.widgets.video.VrVideoView;
 import com.google.vr.sdk.widgets.video.VrVideoEventListener;
+import com.google.vr.sdk.widgets.video.VrVideoView;
+import com.google.vr.sdk.widgets.video.VrVideoView.Options;
 import com.surveillance.surveillancesystem.R;
-
-import java.io.IOException;
 
 
 public class VideoDisplayActivity extends Activity {
@@ -55,14 +53,10 @@ public class VideoDisplayActivity extends Activity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            try {
-                Options options = new Options();
-                options.inputType = Options.TYPE_MONO;
-                vrVideoView.loadVideoFromAsset("output.mp4", options);
-                Toast.makeText(VideoDisplayActivity.this, "Loaded.", Toast.LENGTH_LONG).show();
-            }catch (IOException e){
-                Toast.makeText(VideoDisplayActivity.this, "Cannot Open file.", Toast.LENGTH_LONG).show();
-            }
+            Options options = new Options();
+            options.inputType = Options.TYPE_MONO;
+            //vrVideoView.loadVideoFromAsset("output.mp4", options);
+            Toast.makeText(VideoDisplayActivity.this, "Loaded.", Toast.LENGTH_LONG).show();
             return true;
         }
     }
