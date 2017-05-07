@@ -4,6 +4,7 @@ package com.surveillance.SurveillanceSystem.Fragment;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -17,8 +18,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.surveillance.SurveillanceSystem.Activity.FaceDetectActivity;
 import com.surveillance.SurveillanceSystem.R;
+import com.surveillance.SurveillanceSystem.Server;
 import com.surveillance.SurveillanceSystem.raspberrypi.Camera;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -104,6 +110,14 @@ public class MainFragment extends Fragment {
         cameraPreviewImage2 = (ImageView) root.findViewById(R.id.camera_preview_image2);
         cameraPreviewImage3 = (ImageView) root.findViewById(R.id.camera_preview_image3);
         cameraPreviewImage4 = (ImageView) root.findViewById(R.id.camera_preview_image4);
+        cameraPreviewImage1.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(getContext(), FaceDetectActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
     }
 
     /**
@@ -143,18 +157,19 @@ public class MainFragment extends Fragment {
         }
     }
 
-//    class InitCameraTask extends AsyncTask<Void, Void, Void> {
-//        private final Camera camera;
-//        public InitCameraTask() {
-//
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//
-//            return null;
-//        }
-//    }
+    class InitCameraTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                URL url = new URL(Server.phpPath+"/getCamera.php");
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
 
     class PreviewImageTask extends AsyncTask<Void, Void, Bitmap> {
 
@@ -172,11 +187,6 @@ public class MainFragment extends Fragment {
             this.camera = camera;
         }
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //showImageProgress(progressFrame, progressBar, cameraPreviewImage, true);
-        }
 
         @Override
         protected Bitmap doInBackground(Void... params) {
@@ -202,11 +212,11 @@ public class MainFragment extends Fragment {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             Log.e("onPostExecute", "is Running");
-            showImageProgress(progressFrame, progressBar, cameraPreviewImage, false);
             cameraPreviewImage.setImageBitmap(bitmap);
-//            previewImageTask = new PreviewImageTask(progressFrame, progressBar,
-//                    cameraPreviewImage, camera);
-//            previewImageTask.execute();
+            showImageProgress(progressFrame, progressBar, cameraPreviewImage, false);
+            previewImageTask = new PreviewImageTask(progressFrame, progressBar,
+                    cameraPreviewImage, camera);
+            previewImageTask.execute();
         }
 
         @Override
