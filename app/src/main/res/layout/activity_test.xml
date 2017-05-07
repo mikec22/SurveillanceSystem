@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.surveillance.surveillancesystem.Activity.TestActivity">
+    tools:context="com.surveillance.SurveillanceSystem.Activity.TestActivity">
 
     <!--<WebView-->
         <!--android:layout_width="match_parent"-->

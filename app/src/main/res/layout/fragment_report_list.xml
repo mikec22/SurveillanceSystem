@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.surveillance.surveillancesystem.Fragment.ReportListFragment"
+    tools:context="com.surveillance.SurveillanceSystem.Fragment.ReportListFragment"
     android:weightSum="1">
 
     <TextView

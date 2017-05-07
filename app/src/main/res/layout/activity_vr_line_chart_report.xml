@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.surveillance.surveillancesystem.Activity.VideoLineChartReportActivity">
+    tools:context="com.surveillance.SurveillanceSystem.Activity.VideoLineChartReportActivity">
 
     <com.google.vr.sdk.widgets.video.VrVideoView
         android:id="@+id/vrVideoView"

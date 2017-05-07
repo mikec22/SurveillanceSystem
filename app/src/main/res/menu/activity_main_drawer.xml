@@ -12,26 +12,12 @@
             android:title="Analysis Result" />
 
         <item
-            android:id="@+id/nav_lineChartReport"
-            android:title="Line Chart Report"
+            android:id="@+id/nav_search_face"
             android:icon="@drawable/ic_show_chart_black_48dp"
-            />
-        <item
-            android:id="@+id/nav_setting"
-            android:icon="@drawable/ic_settings_black_24dp"
-            android:title="Setting" />
+            android:title="Face Searching" />
 
 
     </group>
 
-    <item android:title="other">
-        <menu>
-            <item
-                android:id="@+id/nav_logIn"
-                android:icon="@drawable/ic_lock_outline_black_24dp"
-                android:title="Log in"
-                android:visible="true" />
-        </menu>
-    </item>
 
 </menu>
