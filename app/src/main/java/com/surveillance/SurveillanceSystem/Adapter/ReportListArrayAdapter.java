@@ -44,7 +44,7 @@ public class ReportListArrayAdapter extends ArrayAdapter<ReportRecord> {
         LayoutInflater mInflater = (LayoutInflater) super.getContext()
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.report_list_row, parent, false);
+            convertView = mInflater.inflate(R.layout.row_report_list, parent, false);
             holder = new ViewHolder();
             convertView.setTag(holder);
             holder.thumbView = (ImageView) convertView.findViewById(R.id.thumbView);

@@ -40,7 +40,7 @@ public class ImageListArrayAdapter extends ArrayAdapter<SecondFace> {
         ViewHolder holder = null;
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            convertView = mInflater.from(context).inflate(R.layout.image_list_row, parent, false);
+            convertView = mInflater.from(context).inflate(R.layout.row_image_list, parent, false);
             holder = new ViewHolder();
             convertView.setTag(holder);
 //            holder.iv.add((ImageView) convertView.findViewById(R.id.iv1));
