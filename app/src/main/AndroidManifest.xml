@@ -30,7 +30,7 @@
         <activity
             android:name=".Activity.LoginActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
+
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +38,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.MainActivity" />
+        <activity
+            android:name=".Activity.MainActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".Activity.CameraControlActivity" />
         <activity android:name=".Activity.CameraActivity" />
 
@@ -75,7 +77,9 @@
             android:name=".Activity.CameraSettingsActivity"
             android:label="@string/title_activity_camera_settings" />
         <activity android:name=".Activity.TestActivity" />
-        <activity android:name=".Activity.FaceDetectActivity" />
+        <activity
+            android:name=".Activity.FaceDetectActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
