@@ -5,6 +5,12 @@
     tools:context="com.surveillance.SurveillanceSystem.Fragment.SearchResultFragment">
 
 
+    <ListView
+        android:id="@id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="false" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -30,6 +36,7 @@
                     android:weightSum="1">
 
                     <ImageView
+                        android:id="@+id/uploaded_photo"
                         android:layout_width="80dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.10"
@@ -37,12 +44,13 @@
                         android:gravity="start" />
 
                     <TextView
+                        android:id="@+id/result_text"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="0.80" />
 
                     <ImageView
-                        android:id="@+id/imageView"
+                        android:id="@+id/result_photo"
                         android:layout_width="80dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.10"
@@ -52,41 +60,41 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_margin="10dp"
-                card_view:cardCornerRadius="10dp">
+            <!--<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="200dp"-->
+                <!--android:layout_margin="10dp"-->
+                <!--card_view:cardCornerRadius="10dp">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_margin="7dp"
-                    android:orientation="horizontal"
-                    android:weightSum="1">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="100dp"-->
+                    <!--android:layout_margin="7dp"-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:weightSum="1">-->
 
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.10"
-                        android:background="@drawable/face_img_frame"
-                        android:gravity="start" />
+                    <!--<ImageView-->
+                        <!--android:layout_width="80dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_weight="0.10"-->
+                        <!--android:background="@drawable/face_img_frame"-->
+                        <!--android:gravity="start" />-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.80" />
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_weight="0.80" />-->
 
-                    <ImageView
+                    <!--<ImageView-->
 
-                        android:layout_width="80dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.10"
-                        android:background="@drawable/face_img_frame" />
+                        <!--android:layout_width="80dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_weight="0.10"-->
+                        <!--android:background="@drawable/face_img_frame" />-->
 
 
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
+                <!--</LinearLayout>-->
+            <!--</android.support.v7.widget.CardView>-->
 
         </LinearLayout>
     </ScrollView>
