@@ -70,9 +70,10 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_analysis_result:
                         transaction.replace(R.id.container, new ReportListFragment());
                         break;
-                    case R.id.nav_lineChartReport:
-                        Intent intent = new Intent(getApplicationContext(), TestActivity.class);
-                        startActivity(intent);
+                    case R.id.nav_search_face:
+//                        Intent intent = new Intent(getApplicationContext(), TestActivity.class);
+//                        startActivity(intent);
+                        break;
 
                 }
               //  navigationView.getMenu().getItem(1).setChecked()

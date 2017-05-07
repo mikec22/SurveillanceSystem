@@ -143,6 +143,18 @@ public class MainFragment extends Fragment {
         }
     }
 
+//    class InitCameraTask extends AsyncTask<Void, Void, Void> {
+//        private final Camera camera;
+//        public InitCameraTask() {
+//
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            return null;
+//        }
+//    }
 
     class PreviewImageTask extends AsyncTask<Void, Void, Bitmap> {
 
@@ -151,8 +163,8 @@ public class MainFragment extends Fragment {
         private final ImageView cameraPreviewImage;
         private final Camera camera;
 
-         PreviewImageTask(FrameLayout progressFrame, ProgressBar progressBar,
-                                ImageView cameraPreviewImage, Camera camera) {
+        PreviewImageTask(FrameLayout progressFrame, ProgressBar progressBar,
+                         ImageView cameraPreviewImage, Camera camera) {
             super();
             this.progressFrame = progressFrame;
             this.progressBar = progressBar;
