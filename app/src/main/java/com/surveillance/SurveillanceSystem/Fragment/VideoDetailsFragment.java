@@ -26,7 +26,6 @@ public class VideoDetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_video_details, container, false);
 
-
         return root;
     }
 

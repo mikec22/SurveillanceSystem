@@ -130,38 +130,38 @@ public class VideoLineChartReportActivity extends FragmentActivity {
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, loadControl);
         player.setPlayWhenReady(true);
         videoView.setPlayer(player);
-        player.addListener(new ExoPlayer.EventListener() {
-            @Override
-            public void onTimelineChanged(Timeline timeline, Object manifest) {
-
-                Toast.makeText(getApplicationContext(), "seconds:" + player.getCurrentPosition(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-            }
-
-            @Override
-            public void onLoadingChanged(boolean isLoading) {
-
-            }
-
-            @Override
-            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-
-            }
-
-            @Override
-            public void onPlayerError(ExoPlaybackException error) {
-
-            }
-
-            @Override
-            public void onPositionDiscontinuity() {
-
-            }
-        });
+//        player.addListener(new ExoPlayer.EventListener() {
+//            @Override
+//            public void onTimelineChanged(Timeline timeline, Object manifest) {
+//
+//                Toast.makeText(getApplicationContext(), "seconds:" + player.getCurrentPosition(), Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+//
+//            }
+//
+//            @Override
+//            public void onLoadingChanged(boolean isLoading) {
+//
+//            }
+//
+//            @Override
+//            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+//
+//            }
+//
+//            @Override
+//            public void onPlayerError(ExoPlaybackException error) {
+//
+//            }
+//
+//            @Override
+//            public void onPositionDiscontinuity() {
+//
+//            }
+//        });
         //
 
     }
