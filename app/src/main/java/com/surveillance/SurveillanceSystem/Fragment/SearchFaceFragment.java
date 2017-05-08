@@ -5,8 +5,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,34 +22,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.surveillance.SurveillanceSystem.Adapter.ReportContentPagerAdapter;
 import com.surveillance.SurveillanceSystem.Adapter.SearchFaceAdapter;
 import com.surveillance.SurveillanceSystem.FilePath;
 import com.surveillance.SurveillanceSystem.R;
+import com.surveillance.SurveillanceSystem.Server;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-
-import com.surveillance.SurveillanceSystem.Server;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -83,9 +70,9 @@ public class SearchFaceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root =inflater.inflate(R.layout.fragment_search_face, container, false);
+        View root = inflater.inflate(R.layout.fragment_search_face, container, false);
         ActivityCompat.requestPermissions(getActivity(),
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         select_Photo_btn = (Button) root.findViewById(R.id.select_photo_btn);
         upload_btn = (Button) root.findViewById(R.id.upload_photo_btn);
         selectedPhoto = (ImageView) root.findViewById(R.id.selectedPhoto);
@@ -130,16 +117,16 @@ public class SearchFaceFragment extends Fragment {
                 Uri selectedImageUri = data.getData();
                 selectedFilePath = FilePath.getPath(getActivity(), selectedImageUri);
                 Log.d("Select Path : ", selectedFilePath);
-                if(selectedFilePath != null && !selectedFilePath.equals("")){
+                if (selectedFilePath != null && !selectedFilePath.equals("")) {
 //                    uploads.setText(selectedFilePath);
                     File imgFile = new File(selectedFilePath);
                     imageName = imgFile.getName();
-                    if(imgFile.exists()){
+                    if (imgFile.exists()) {
                         Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 //                        imageView.setImageBitmap(bitmap);
                     }
-                }else{
-                    Toast.makeText(getActivity(),"Cannot upload file to server",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Cannot upload file to server", Toast.LENGTH_SHORT).show();
                 }
                 try {
                     //Getting the Bitmap from Gallery
@@ -230,7 +217,7 @@ public class SearchFaceFragment extends Fragment {
 //            Log.d("Json get:", String.valueOf(b));
                 Log.d("Json get:", String.valueOf(jsonObject));
                 byte[] decodedString = Base64.decode(jsonObject.getString("upload_face_base64"), Base64.DEFAULT);
-                Log.d("Get String :" , jsonObject.getString("upload_face_base64"));
+                Log.d("Get String :", jsonObject.getString("upload_face_base64"));
                 selectedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 //                selectedPhoto.setImageBitmap(decodedByte);
                 URL newurl = new URL(Server.mediaPath + jsonObject.getString("face_path"));
@@ -250,6 +237,7 @@ public class SearchFaceFragment extends Fragment {
         @Override
         protected void onPostExecute(JSONObject jsonObject) {
             try {
+<<<<<<< HEAD
 
                 byte[] decodedString = Base64.decode(jsonObject.getString("upload_face_base64"), Base64.DEFAULT);
                 Bitmap selectedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -270,6 +258,17 @@ public class SearchFaceFragment extends Fragment {
 ////                Log.d("Adapter :" , jsonObject.toString());
 //                viewPager.setAdapter(new SearchFaceAdapter(getActivity().getSupportFragmentManager(), fragments));
 //                viewPager.setCurrentItem(0);
+=======
+                fragments = new ArrayList<>();
+                fragments.add(new SearchResultFragment(selectedBitmap, selectedBitmap, jsonObject.getString("upload_face_base64")));
+//        fragments.add(new LineChartFragment());
+                fragments.add(new VideoDetailsFragment());
+
+                adapter = new SearchFaceAdapter(getActivity().getSupportFragmentManager(), fragments);
+                Log.d("Adapter :", jsonObject.toString());
+                viewPager.setAdapter(new SearchFaceAdapter(getActivity().getSupportFragmentManager(), fragments));
+                viewPager.setCurrentItem(0);
+>>>>>>> origin/master
 //                URL newurl = new URL(Server.mediaPath + jsonObject.getString("face_path"));
 //                Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openStream());
 //                resultPhoto.setImageBitmap(mIcon_val);

@@ -38,4 +38,5 @@ public class ReportContentPagerAdapter extends FragmentPagerAdapter {
                 return "";
         }
     }
+
 }
