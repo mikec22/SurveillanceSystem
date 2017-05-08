@@ -28,9 +28,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activity.LoginActivity"
+            android:name="com.surveillance.SurveillanceSystem.Activity.LoginActivity"
             android:label="@string/app_name"
-
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,26 +38,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Activity.MainActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".Activity.CameraControlActivity" />
-        <activity android:name=".Activity.CameraActivity" />
+        <activity android:name="com.surveillance.SurveillanceSystem.Activity.MainActivity" />
+        <activity android:name="com.surveillance.SurveillanceSystem.Activity.CameraControlActivity" />
+        <activity android:name="com.surveillance.SurveillanceSystem.Activity.CameraActivity" />
 
         <service
-            android:name=".MyFirebaseMessagingService"
+            android:name="com.surveillance.SurveillanceSystem.MyFirebaseMessagingService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <service
-            android:name=".MyFirebaseInstanceIDService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
@@ -72,14 +62,11 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
-        <activity android:name=".Activity.VideoLineChartReportActivity" />
+        <activity android:name="com.surveillance.SurveillanceSystem.Activity.VideoLineChartReportActivity" />
         <activity
-            android:name=".Activity.CameraSettingsActivity"
+            android:name="com.surveillance.SurveillanceSystem.Activity.CameraSettingsActivity"
             android:label="@string/title_activity_camera_settings" />
-        <activity android:name=".Activity.TestActivity" />
-        <activity
-            android:name=".Activity.FaceDetectActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name="com.surveillance.SurveillanceSystem.Activity.TestActivity"></activity>
     </application>
 
 </manifest>

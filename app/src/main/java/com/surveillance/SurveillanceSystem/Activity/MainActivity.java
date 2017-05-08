@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.surveillance.SurveillanceSystem.Fragment.MainFragment;
 import com.surveillance.SurveillanceSystem.Fragment.ReportListFragment;
-import com.surveillance.SurveillanceSystem.Fragment.SearchFaceFragment;
 import com.surveillance.SurveillanceSystem.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        usernameView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.username);
+        usernameView =(TextView) navigationView.getHeaderView(0).findViewById(R.id.username);
         usernameView.setText(username);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -72,11 +71,12 @@ public class MainActivity extends AppCompatActivity {
                         transaction.replace(R.id.container, new ReportListFragment());
                         break;
                     case R.id.nav_search_face:
-                        transaction.replace(R.id.container, new SearchFaceFragment());
+//                        Intent intent = new Intent(getApplicationContext(), TestActivity.class);
+//                        startActivity(intent);
                         break;
 
                 }
-                //  navigationView.getMenu().getItem(1).setChecked()
+              //  navigationView.getMenu().getItem(1).setChecked()
                 transaction.addToBackStack(null).commit();
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
@@ -149,11 +149,13 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(this, CameraSettingsActivity.class);
+           Intent intent = new Intent(this, CameraSettingsActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
 
 }

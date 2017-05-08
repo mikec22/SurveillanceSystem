@@ -69,7 +69,7 @@ public class VideoLineChartReportActivity extends FragmentActivity {
     private SimpleExoPlayerView videoView;
     private SimpleExoPlayer player;
     private Intent intent;
-    private ReportRecord reportRecord;
+    private static ReportRecord reportRecord;
     private ProgressBar videoProgressBar, dataProgressBar;
     private ArrayList<Fragment> fragments;
     private LoadReportDataTask loadDataTask;
@@ -84,8 +84,6 @@ public class VideoLineChartReportActivity extends FragmentActivity {
     public JSONObject getReportData() {
         return reportData;
     }
-
-
 
     private class VrEventListener extends VrVideoEventListener{
         @Override
@@ -132,38 +130,38 @@ public class VideoLineChartReportActivity extends FragmentActivity {
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, loadControl);
         player.setPlayWhenReady(true);
         videoView.setPlayer(player);
-//        player.addListener(new ExoPlayer.EventListener() {
-//            @Override
-//            public void onTimelineChanged(Timeline timeline, Object manifest) {
-//
-//                Toast.makeText(getApplicationContext(), "seconds:" + player.getCurrentPosition(), Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-//
-//            }
-//
-//            @Override
-//            public void onLoadingChanged(boolean isLoading) {
-//
-//            }
-//
-//            @Override
-//            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-//
-//            }
-//
-//            @Override
-//            public void onPlayerError(ExoPlaybackException error) {
-//
-//            }
-//
-//            @Override
-//            public void onPositionDiscontinuity() {
-//
-//            }
-//        });
+        player.addListener(new ExoPlayer.EventListener() {
+            @Override
+            public void onTimelineChanged(Timeline timeline, Object manifest) {
+
+                Toast.makeText(getApplicationContext(), "seconds:" + player.getCurrentPosition(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+            }
+
+            @Override
+            public void onLoadingChanged(boolean isLoading) {
+
+            }
+
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+
+            }
+
+            @Override
+            public void onPlayerError(ExoPlaybackException error) {
+
+            }
+
+            @Override
+            public void onPositionDiscontinuity() {
+
+            }
+        });
         //
 
     }
@@ -201,7 +199,7 @@ public class VideoLineChartReportActivity extends FragmentActivity {
         }
     }
 
-    public ReportRecord getReportRecord() {
+    public static ReportRecord getReportRecord() {
         return reportRecord;
     }
 

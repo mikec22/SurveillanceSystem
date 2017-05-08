@@ -5,6 +5,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,26 +21,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.surveillance.SurveillanceSystem.Adapter.ReportContentPagerAdapter;
 import com.surveillance.SurveillanceSystem.Adapter.SearchFaceAdapter;
 import com.surveillance.SurveillanceSystem.FilePath;
 import com.surveillance.SurveillanceSystem.R;
-import com.surveillance.SurveillanceSystem.Server;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+
+import com.surveillance.SurveillanceSystem.Server;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -52,14 +64,10 @@ public class SearchFaceFragment extends Fragment {
     private static final int SELECT_PICTURE = 1;
     private String selectedFilePath;
     private String imageName;
-    private Bitmap selectedBitmap, mIcon_val;
+    private Bitmap selectedBitmap;
     private ArrayList<Fragment> fragments;
     private ViewPager viewPager;
     private SearchFaceAdapter adapter;
-
-
-    private ImageView uploadedPhoto, resultPhoto;
-    private TextView resultText;
 
     public SearchFaceFragment() {
         // Required empty public constructor
@@ -70,18 +78,13 @@ public class SearchFaceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_search_face, container, false);
+        View root =inflater.inflate(R.layout.fragment_search_face, container, false);
         ActivityCompat.requestPermissions(getActivity(),
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
         select_Photo_btn = (Button) root.findViewById(R.id.select_photo_btn);
         upload_btn = (Button) root.findViewById(R.id.upload_photo_btn);
         selectedPhoto = (ImageView) root.findViewById(R.id.selectedPhoto);
         viewPager = (ViewPager) root.findViewById(R.id.pager);
-
-
-        uploadedPhoto = (ImageView)root.findViewById(R.id.uploaded_photo);
-        resultPhoto = (ImageView) root.findViewById(R.id.result_photo);
-        resultText = (TextView) root.findViewById(R.id.result_text);
 //        fragments = new ArrayList<>();
 //        fragments.add(new SearchResultFragment());
 ////        fragments.add(new LineChartFragment());
@@ -117,16 +120,16 @@ public class SearchFaceFragment extends Fragment {
                 Uri selectedImageUri = data.getData();
                 selectedFilePath = FilePath.getPath(getActivity(), selectedImageUri);
                 Log.d("Select Path : ", selectedFilePath);
-                if (selectedFilePath != null && !selectedFilePath.equals("")) {
+                if(selectedFilePath != null && !selectedFilePath.equals("")){
 //                    uploads.setText(selectedFilePath);
                     File imgFile = new File(selectedFilePath);
                     imageName = imgFile.getName();
-                    if (imgFile.exists()) {
+                    if(imgFile.exists()){
                         Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 //                        imageView.setImageBitmap(bitmap);
                     }
-                } else {
-                    Toast.makeText(getActivity(), "Cannot upload file to server", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getActivity(),"Cannot upload file to server",Toast.LENGTH_SHORT).show();
                 }
                 try {
                     //Getting the Bitmap from Gallery
@@ -217,12 +220,9 @@ public class SearchFaceFragment extends Fragment {
 //            Log.d("Json get:", String.valueOf(b));
                 Log.d("Json get:", String.valueOf(jsonObject));
                 byte[] decodedString = Base64.decode(jsonObject.getString("upload_face_base64"), Base64.DEFAULT);
-                Log.d("Get String :", jsonObject.getString("upload_face_base64"));
+                Log.d("Get String :" , jsonObject.getString("upload_face_base64"));
                 selectedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 //                selectedPhoto.setImageBitmap(decodedByte);
-                URL newurl = new URL(Server.mediaPath + jsonObject.getString("face_path"));
-                mIcon_val = BitmapFactory.decodeStream(newurl.openStream());
-
                 ds.close();
                 return jsonObject;
 //            handler.sendEmptyMessage(0x12);
@@ -238,6 +238,11 @@ public class SearchFaceFragment extends Fragment {
         protected void onPostExecute(JSONObject jsonObject) {
             try {
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of c343688... Merge remote-tracking branch 'origin/master'
 
                 byte[] decodedString = Base64.decode(jsonObject.getString("upload_face_base64"), Base64.DEFAULT);
                 Bitmap selectedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -258,20 +263,42 @@ public class SearchFaceFragment extends Fragment {
 ////                Log.d("Adapter :" , jsonObject.toString());
 //                viewPager.setAdapter(new SearchFaceAdapter(getActivity().getSupportFragmentManager(), fragments));
 //                viewPager.setCurrentItem(0);
+<<<<<<< HEAD
 =======
                 fragments = new ArrayList<>();
                 fragments.add(new SearchResultFragment(selectedBitmap, selectedBitmap, jsonObject.getString("upload_face_base64")));
+=======
+                fragments = new ArrayList<>();
+                fragments.add(new SearchResultFragment(selectedBitmap,selectedBitmap, jsonObject.getString("upload_face_base64")));
+>>>>>>> parent of 8ce4a96... Merge branch 'shing'
+=======
+                fragments = new ArrayList<>();
+                fragments.add(new SearchResultFragment(selectedBitmap,selectedBitmap, jsonObject.getString("upload_face_base64")));
+>>>>>>> parent of 8ce4a96... Merge branch 'shing'
 //        fragments.add(new LineChartFragment());
                 fragments.add(new VideoDetailsFragment());
 
                 adapter = new SearchFaceAdapter(getActivity().getSupportFragmentManager(), fragments);
+<<<<<<< HEAD
+<<<<<<< HEAD
                 Log.d("Adapter :", jsonObject.toString());
                 viewPager.setAdapter(new SearchFaceAdapter(getActivity().getSupportFragmentManager(), fragments));
                 viewPager.setCurrentItem(0);
 >>>>>>> origin/master
+=======
+                Log.d("Adapter :" , jsonObject.toString());
+                viewPager.setAdapter(new SearchFaceAdapter(getActivity().getSupportFragmentManager(), fragments));
+                viewPager.setCurrentItem(0);
+>>>>>>> parent of 8ce4a96... Merge branch 'shing'
+=======
+>>>>>>> parent of c343688... Merge remote-tracking branch 'origin/master'
+=======
+                Log.d("Adapter :" , jsonObject.toString());
+                viewPager.setAdapter(new SearchFaceAdapter(getActivity().getSupportFragmentManager(), fragments));
+                viewPager.setCurrentItem(0);
+>>>>>>> parent of 8ce4a96... Merge branch 'shing'
 //                URL newurl = new URL(Server.mediaPath + jsonObject.getString("face_path"));
-//                Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openStream());
-//                resultPhoto.setImageBitmap(mIcon_val);
+//                Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openConnection() .getInputStream());
 //                setResultValue(jsonObject.getString("upload_face_base64"), selectedBitmap,jsonObject.getString("percentage"));
 //                ArrayList<Entry> values = new ArrayList<>();
 //                for (int i = 0; i < jsonArray.length(); ++i) {
