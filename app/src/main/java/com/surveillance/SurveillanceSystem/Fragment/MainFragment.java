@@ -19,12 +19,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.surveillance.SurveillanceSystem.Activity.FaceDetectActivity;
+import com.surveillance.SurveillanceSystem.ExtensionCamera;
 import com.surveillance.SurveillanceSystem.R;
-import com.surveillance.SurveillanceSystem.Server;
 import com.surveillance.SurveillanceSystem.raspberrypi.Camera;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +38,7 @@ public class MainFragment extends Fragment {
     private ImageView cameraPreviewImage1, cameraPreviewImage2, cameraPreviewImage3, cameraPreviewImage4;
     private Camera camera1, camera2, camera3, camera4;
 
-    private PreviewImageTask previewImageTask;
+    private PreviewImageTask previewImageTask, previewImageTask2,previewImageTask3,previewImageTask4;
 
     //private boolean camera1isOn, isCamera2isOn, isCamera3isOn, isCamera4isOn;
 
@@ -56,7 +53,11 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         initView(root);
-        camera1 = new Camera();
+        camera1 = new ExtensionCamera();
+        camera2 = new ExtensionCamera();
+        camera3 = new ExtensionCamera();
+        camera4 = new ExtensionCamera();
+        camera1.setPreviewLink("http://192.168.1.105/picam/cam_pic.php?pDelay=66666");
         return root;
     }
 
@@ -69,7 +70,16 @@ public class MainFragment extends Fragment {
 //        mThreadHandler.post(KeepLoadPreviewImageThread1);
         previewImageTask = new PreviewImageTask(progressFrame1, loadImageProgress1,
                 cameraPreviewImage1, camera1);
+        previewImageTask2 = new PreviewImageTask(progressFrame2, loadImageProgress2,
+                cameraPreviewImage2, camera2);
+        previewImageTask3 = new PreviewImageTask(progressFrame3, loadImageProgress3,
+                cameraPreviewImage3, camera3);
+        previewImageTask4 = new PreviewImageTask(progressFrame4, loadImageProgress4,
+                cameraPreviewImage4, camera4);
         previewImageTask.execute();
+        previewImageTask2.execute();
+        previewImageTask3.execute();
+        previewImageTask4.execute();
         Log.e("onResume", "is Running");
     }
 
@@ -82,6 +92,9 @@ public class MainFragment extends Fragment {
     @Override
     public void onPause() {
         previewImageTask.cancel(false);
+        previewImageTask2.cancel(false);
+        previewImageTask3.cancel(false);
+        previewImageTask4.cancel(false);
         super.onPause();
 //        if (mThreadHandler != null) {
 //            mThreadHandler.removeCallbacks(KeepLoadPreviewImageThread1);
@@ -157,19 +170,19 @@ public class MainFragment extends Fragment {
         }
     }
 
-    class InitCameraTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                URL url = new URL(Server.phpPath+"/getCamera.php");
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
+//    class InitCameraTask extends AsyncTask<Void, Void, Void> {
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            try {
+//                URL url = new URL(Server.phpPath+"/getCamera.php");
+//
+//            } catch (MalformedURLException e) {
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+//    }
 
     class PreviewImageTask extends AsyncTask<Void, Void, Bitmap> {
 

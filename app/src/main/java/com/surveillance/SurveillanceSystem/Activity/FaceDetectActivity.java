@@ -1,27 +1,27 @@
 package com.surveillance.SurveillanceSystem.Activity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.webkit.WebView;
 import android.widget.ListView;
 import android.widget.Switch;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.surveillance.SurveillanceSystem.Adapter.FaceImageListAdapter;
 import com.surveillance.SurveillanceSystem.R;
 import com.surveillance.SurveillanceSystem.Server;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,6 +33,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -42,12 +43,8 @@ public class FaceDetectActivity extends AppCompatActivity {
     private LineChart lineChart;
     private Switch openCVSwitch;
     private LinkedList<Entry> chartValues;
+    private LinkedList<List<Bitmap>> imgLists;
     private LoadStatisticsTask mTask;
-    private Handler mUI_Handler = new Handler();
-    private Handler mThreadHandler;
-    JsonObjectRequest jsObjRequest;
-    private HandlerThread mThread;
-    RequestQueue mQueue;
     private MyTimerTask timerTask;
     Timer timer = new Timer(true);
 
@@ -60,17 +57,17 @@ public class FaceDetectActivity extends AppCompatActivity {
         lineChart = (LineChart) findViewById(R.id.lineChart);
         openCVSwitch = (Switch) findViewById(R.id.openCV_switch);
         mTask = new LoadStatisticsTask();
-
+        imgLists = new LinkedList<>();
         chartValues = new LinkedList<>();
         for (int i = 0; i < 10; i++) {
-            chartValues.add(new Entry(i,0));
+            chartValues.add(new Entry(i, 0));
         }
-        timerTask=new MyTimerTask();
+        timerTask = new MyTimerTask();
         timer.schedule(timerTask, 1000, 1000);
         wvPreView.setPadding(0, 0, 0, 0);
         wvPreView.getSettings().setLoadWithOverviewMode(true);
         wvPreView.getSettings().setUseWideViewPort(true);
-        wvPreView.loadUrl("http://fyp.bu5hit.xyz:5000/stream/1");
+        wvPreView.loadUrl(Server.mediaPath+"/stream/1");
     }
 
 //    private Runnable r1 = new Runnable() {
@@ -208,7 +205,6 @@ public class FaceDetectActivity extends AppCompatActivity {
                     chartValues.add(new Entry(0, jsonObject.getInt("total_face")));
                 }
                 LineDataSet set1 = new LineDataSet(chartValues, "Number of Face(s)");
-
                 // set the line to be drawn like this "- - - - - -"
                 set1.enableDashedLine(10f, 5f, 0f);
                 set1.enableDashedHighlightLine(10f, 5f, 0f);
@@ -230,7 +226,22 @@ public class FaceDetectActivity extends AppCompatActivity {
                 lineChart.setData(new LineData(dataSets));
                 //Renew the Line Chart
                 lineChart.invalidate();
-            } catch (JSONException e) {
+
+                JSONArray jsonArray = jsonObject.getJSONArray("faceimg");
+                ArrayList<Bitmap> bitmaps = new ArrayList<>();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    URL imgUrl = new URL(Server.phpPath +
+                            jsonArray.getJSONObject(i).getString("file_path"));
+                    bitmaps.add(BitmapFactory.decodeStream(imgUrl.openStream()));
+                }
+                if(imgLists.size()>4){
+                    imgLists.removeFirst();
+                }
+                imgLists.add(bitmaps);
+                FaceImageListAdapter adapter = new FaceImageListAdapter(getApplicationContext()
+                        ,android.R.layout.list_content,imgLists);
+                lvFaceImg.setAdapter(adapter);
+            } catch (JSONException | IOException e) {
                 e.printStackTrace();
             }
         }

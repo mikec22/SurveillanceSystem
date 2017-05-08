@@ -3,6 +3,7 @@ package com.surveillance.SurveillanceSystem;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.surveillance.SurveillanceSystem.raspberrypi.Camera;
 
@@ -15,6 +16,7 @@ public class ExtensionCamera extends Camera {
     public Bitmap getPreviewImage() {
         try {
             URL url = new URL(super.getPreviewLink());
+            Log.e("url",url.toString());
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             return BitmapFactory.decodeStream(connection.getInputStream());
         } catch (IOException e) {

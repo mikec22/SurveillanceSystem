@@ -69,7 +69,7 @@ public class VideoLineChartReportActivity extends FragmentActivity {
     private SimpleExoPlayerView videoView;
     private SimpleExoPlayer player;
     private Intent intent;
-    private static ReportRecord reportRecord;
+    private ReportRecord reportRecord;
     private ProgressBar videoProgressBar, dataProgressBar;
     private ArrayList<Fragment> fragments;
     private LoadReportDataTask loadDataTask;
@@ -84,6 +84,8 @@ public class VideoLineChartReportActivity extends FragmentActivity {
     public JSONObject getReportData() {
         return reportData;
     }
+
+
 
     private class VrEventListener extends VrVideoEventListener{
         @Override
@@ -199,7 +201,7 @@ public class VideoLineChartReportActivity extends FragmentActivity {
         }
     }
 
-    public static ReportRecord getReportRecord() {
+    public ReportRecord getReportRecord() {
         return reportRecord;
     }
 

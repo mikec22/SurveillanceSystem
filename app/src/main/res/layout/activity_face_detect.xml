@@ -33,7 +33,8 @@
         android:id="@+id/lvFaceImage"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="45" />
+        android:layout_weight="45"
+        android:visibility="gone"/>
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/lineChart"
