@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.data.Entry;
@@ -64,10 +65,14 @@ public class SearchFaceFragment extends Fragment {
     private static final int SELECT_PICTURE = 1;
     private String selectedFilePath;
     private String imageName;
-    private Bitmap selectedBitmap;
+    private Bitmap selectedBitmap, mIcon_val;
     private ArrayList<Fragment> fragments;
     private ViewPager viewPager;
     private SearchFaceAdapter adapter;
+
+
+    private ImageView uploadedPhoto, resultPhoto;
+    private TextView resultText;
 
     public SearchFaceFragment() {
         // Required empty public constructor
@@ -85,6 +90,11 @@ public class SearchFaceFragment extends Fragment {
         upload_btn = (Button) root.findViewById(R.id.upload_photo_btn);
         selectedPhoto = (ImageView) root.findViewById(R.id.selectedPhoto);
         viewPager = (ViewPager) root.findViewById(R.id.pager);
+
+
+        uploadedPhoto = (ImageView)root.findViewById(R.id.uploaded_photo);
+        resultPhoto = (ImageView) root.findViewById(R.id.result_photo);
+        resultText = (TextView) root.findViewById(R.id.result_text);
 //        fragments = new ArrayList<>();
 //        fragments.add(new SearchResultFragment());
 ////        fragments.add(new LineChartFragment());
@@ -223,6 +233,9 @@ public class SearchFaceFragment extends Fragment {
                 Log.d("Get String :" , jsonObject.getString("upload_face_base64"));
                 selectedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 //                selectedPhoto.setImageBitmap(decodedByte);
+                URL newurl = new URL(Server.mediaPath + jsonObject.getString("face_path"));
+                mIcon_val = BitmapFactory.decodeStream(newurl.openStream());
+
                 ds.close();
                 return jsonObject;
 //            handler.sendEmptyMessage(0x12);
@@ -237,17 +250,29 @@ public class SearchFaceFragment extends Fragment {
         @Override
         protected void onPostExecute(JSONObject jsonObject) {
             try {
-                fragments = new ArrayList<>();
-                fragments.add(new SearchResultFragment(selectedBitmap,selectedBitmap, jsonObject.getString("upload_face_base64")));
-//        fragments.add(new LineChartFragment());
-                fragments.add(new VideoDetailsFragment());
 
-                adapter = new SearchFaceAdapter(getActivity().getSupportFragmentManager(), fragments);
-                Log.d("Adapter :" , jsonObject.toString());
-                viewPager.setAdapter(new SearchFaceAdapter(getActivity().getSupportFragmentManager(), fragments));
-                viewPager.setCurrentItem(0);
+                byte[] decodedString = Base64.decode(jsonObject.getString("upload_face_base64"), Base64.DEFAULT);
+                Bitmap selectedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                uploadedPhoto.setImageBitmap(selectedBitmap);
+                resultPhoto.setImageBitmap(mIcon_val);
+                resultText.setText("Similarly : " + jsonObject.getString("percentage"));
+
+//                new URL()
+
+
+//                fragments = new ArrayList<>();
+//                fragments.add(new SearchResultFragment(selectedBitmap,selectedBitmap, jsonObject.getString("upload_face_base64")));
+////        fragments.add(new LineChartFragment());
+//                fragments.add(new VideoDetailsFragment());
+//
+//                adapter = new SearchFaceAdapter(getActivity().getSupportFragmentManager(), fragments);
+////                Log.d("Adapter :" , jsonObject.toString());
+//                viewPager.setAdapter(new SearchFaceAdapter(getActivity().getSupportFragmentManager(), fragments));
+//                viewPager.setCurrentItem(0);
 //                URL newurl = new URL(Server.mediaPath + jsonObject.getString("face_path"));
-//                Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openConnection() .getInputStream());
+//                Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openStream());
+//                resultPhoto.setImageBitmap(mIcon_val);
 //                setResultValue(jsonObject.getString("upload_face_base64"), selectedBitmap,jsonObject.getString("percentage"));
 //                ArrayList<Entry> values = new ArrayList<>();
 //                for (int i = 0; i < jsonArray.length(); ++i) {
